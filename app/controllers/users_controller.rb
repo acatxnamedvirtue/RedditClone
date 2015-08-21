@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action :ensure_owner, except: [:new, :create]
+  skip_before_action :ensure_logged_in, only: [:new, :create]
+
   def new
     @user = User.new
   end
@@ -9,7 +12,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:notice] = "Welcome to the site!"
       log_in_user!(@user)
-      redirect_to user_url(@user)#subs_url
+      redirect_to :root
     else
       flash.now[:errors] = @user.errors.full_messages
       render :new
@@ -17,15 +20,15 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = current_user
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = current_user
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = current_user
 
     if @user.update(user_params)
       flash[:notice] = "You've edited yourself!"
@@ -43,6 +46,10 @@ class UsersController < ApplicationController
   end
 
   private
+  def ensure_owner
+    redirect_to :root unless current_user == User.find(params[:id])
+  end
+
   def user_params
     params.require(:user).permit(:email, :username, :password)
   end

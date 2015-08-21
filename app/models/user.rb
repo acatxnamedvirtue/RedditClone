@@ -11,6 +11,22 @@ class User < ActiveRecord::Base
     foreign_key: :moderator_id,
     primary_key: :id
 
+  has_many :posts,
+    dependent: :destroy,
+    class_name: 'Post',
+    foreign_key: :author_id,
+    primary_key: :id
+
+  has_many :comments,
+    dependent: :destroy,
+    class_name: "Comment",
+    foreign_key: :author_id,
+    primary_key: :id
+
+  has_many :votes,
+    class_name: "Vote",
+    foreign_key: :voter_id
+
   attr_reader :password
 
   def self.find_by_credentials(username, password)

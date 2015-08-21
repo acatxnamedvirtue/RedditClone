@@ -10,14 +10,21 @@
 
 <% if logged_in? %>
   <%= link_to "Log Out", session_url, method: :delete %>
+  <%= link_to "Your Account", user_url(current_user) %>
 <% else %>
   <%= link_to "Sign Up", new_user_url %>
   <%= link_to "Log In", new_session_url %>
 <% end %>
 
+
+
 <br>
 
 <%= link_to "Sub Index", subs_url %>
+
+<br>
+
+<%= flash[:notice] %>
 
 <%= yield %>
 

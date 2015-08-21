@@ -1,4 +1,7 @@
 class SubsController < ApplicationController
+  before_action :ensure_moderator, only: [:edit, :update, :destroy]
+  skip_before_action :ensure_logged_in, only: [:show, :index]
+
   def index
     @subs = Sub.all
   end
@@ -24,7 +27,7 @@ class SubsController < ApplicationController
   end
 
   def edit
-    @sub = Sub.find(params[:id])
+    @sub = current_user.subs.find(params[:id])
   end
 
   def update
@@ -39,7 +42,17 @@ class SubsController < ApplicationController
     end
   end
 
+  def destroy
+    current_user.subs.find(params[:id]).destroy!
+    redirect_to :root
+  end
+
   private
+
+  def ensure_moderator
+    redirect_to :root unless Sub.find(params[:id]).moderator == current_user
+  end
+
   def sub_params
     params.require(:sub).permit(:title, :description)
   end

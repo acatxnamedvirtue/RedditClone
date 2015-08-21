@@ -1,0 +1,32 @@
+<h1>
+  <% @post.subs.each do |sub| %>
+    <%= link_to sub.title, sub %><br>
+  <% end %>
+</h1>
+
+<h1><%= @post.title %>
+(<%= score(@post) %>)
+<%= link_to "+", upvote_post_url(@post), method: :post %>
+<%= link_to "-", downvote_post_url(@post), method: :post %></h1>
+<br>
+
+<p>Author: <%= @post.author.username %>
+<p>Link: <a href="<%= @post.url %>"><%= @post.url %></a>
+<p>Content: <%= @post.content %>
+
+<p>
+<% if current_user == @post.author %>
+  <%= link_to "Edit this post", edit_post_url(@post) %>
+  <p>
+  <%= link_to "Delete this post", @post, method: :delete %>
+<% end %>
+
+<%= render 'comments/form', parent: nil %>
+
+<h2>Comments</h2>
+
+<% @all_comments[nil].sort { |comment| score(comment) }.reverse.each do |comment| %>
+  <%= render 'comments/comment',
+    comment: comment,
+    all_comments: @all_comments %>
+<% end %>

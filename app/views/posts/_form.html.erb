@@ -1,0 +1,42 @@
+<% action = (post.persisted? ? post_url(post) : posts_url) %>
+<% method = (post.persisted? ? :patch : :post) %>
+
+<%= render 'shared/errors' %>
+
+<form method="post" action="<%= action %>">
+  <input type="hidden" name="_method" value="<%= method %>">
+  <%= form_auth_token%>
+
+  <label for="post_title">Title</label>
+  <input
+    id="post_title"
+    type="text"
+    name="post[title]"
+    value="<%= post.title %>">
+
+  <label for="post_url">URL</label>
+  <input
+    id="post_url"
+    type="text"
+    name="post[url]"
+    value="<%= post.url %>">
+
+  <label for="post_content">Content</label>
+  <textarea
+    id="post_content"
+    name="post[content]"><%= post.content %></textarea>
+
+  Subs
+  <% all_subs.each do |sub| %>
+    <label>
+      <input type="checkbox"
+             name="post[sub_ids][]"
+             value="<%= sub.id %>"
+             <%= "checked" if post.subs.include?(sub) ||
+               params[:sub_id] == sub.id.to_s %>>
+      <%= sub.title %>
+    </label>
+  <% end %>
+
+  <button>Submit!</button>
+</form>

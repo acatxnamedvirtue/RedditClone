@@ -1,0 +1,20 @@
+<%= comment.author.username %> said at <%= comment.created_at %>
+(<%= score(comment) %>)
+<%= link_to "+", upvote_comment_url(comment), method: :post %>
+<%= link_to "-", downvote_comment_url(comment), method: :post %>
+
+<br><%= comment.content %><br>
+
+<% if current_user == comment.author %>
+  <br><%= link_to "Delete this comment", comment, method: :delete %>
+<% end %>
+
+<%= render 'comments/form', parent: comment %>
+
+<ul>
+  <% all_comments[comment.id].sort { |comment| score(comment) }.reverse.each do |child| %>
+    <li><%= render 'comments/comment',
+      comment: child,
+      all_comments: all_comments %></li>
+  <% end %>
+</ul>

@@ -1,0 +1,17 @@
+<% return unless logged_in? %>
+
+<%= render 'shared/errors' %>
+
+<form method="post" action="<%= comments_url %>">
+  <%= form_auth_token%>
+
+  <% if parent %>
+    <input type="hidden" name="comment[parent_comment_id]" value="<%= parent.id %>">
+  <% end %>
+
+  <input type="hidden" name="comment[post_id]" value="<%= params[:id] %>">
+
+  <textarea name="comment[content]"></textarea>
+
+  <button>Add comment</button>
+</form>

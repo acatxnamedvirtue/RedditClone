@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_action :ensure_logged_in, except: :destroy
+
   def new
     @username = ""
   end
@@ -8,7 +10,8 @@ class SessionsController < ApplicationController
                                      params[:user][:password])
     if user
       log_in_user!(user)
-      redirect_to user_url(user)
+      flash[:notice] = "So good to see you back!"
+      redirect_to :root
     else
       flash.now[:errors] = ["Invalid username and/or password"]
       @username = params[:user][:username]

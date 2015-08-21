@@ -3,6 +3,18 @@
 <p>Description: <%= @sub.description %>
 <p><% if current_user == @sub.moderator %>
   <%= link_to "Edit this sub", edit_sub_url(@sub) %>
+  <p><%= link_to "Delete this sub", @sub, method: :delete %>
 <% end %>
 
 <h2>Posts</h2>
+
+<%= link_to "Create a new post!", new_sub_post_url(@sub) %>
+
+<ul>
+  <% @sub.posts.sort { |post| score(post) }.reverse.each do |post| %>
+    <li>
+      <%= link_to post.title, post %>
+      (<%= score(post) %>)
+    </li>
+  <% end %>
+</ul>
