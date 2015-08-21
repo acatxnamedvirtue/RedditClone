@@ -1,0 +1,7 @@
+<h1>Your Account</h1>
+
+Username: <%= @user.username %>
+Email: <%= @user.email %>
+
+<%= link_to "Edit Your Account", @user %>
+<%= link_to "Delete Your Account", @user, method: :delete %>
