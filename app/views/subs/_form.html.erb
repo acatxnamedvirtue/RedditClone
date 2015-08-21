@@ -1,0 +1,25 @@
+<% action = (sub.persisted? ? sub_url(sub) : subs_url) %>
+<% method = (sub.persisted? ? :patch : :post) %>
+
+<%= render 'shared/errors' %>
+
+<form method="post" action="<%= action %>">
+  <input type="hidden" name="_method" value="<%= method %>">
+  <%= form_auth_token%>
+
+  <label for="sub_title">Title</label>
+  <input
+    id="sub_title"
+    type="text"
+    name="sub[title]"
+    value="<%= sub.title %>">
+
+  <label for="sub_description">Description</label>
+  <input
+    id="sub_description"
+    type="text"
+    name="sub[description]"
+    value="<%= sub.description %>">
+
+  <button>Submit!</button>
+</form>
